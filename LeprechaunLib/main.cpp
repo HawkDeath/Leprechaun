@@ -5,6 +5,11 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 int main(void) {
   GLFWwindow *window;
@@ -16,6 +21,17 @@ int main(void) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  // Test of STB_IMAGE
+  //int width, height, nrChannels;
+  //unsigned char *data =
+  //    stbi_load("container.jpg", &width, &height, &nrChannels, 0); 
+
+  // Test of freetype2
+  // FT_Library ft;
+  // if (FT_Init_FreeType(&ft)) {
+  // return -1;
+  // }
 
 
   /* Create a windowed mode window and its OpenGL context */

@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(3part LANGUAGES C CXX)
 
-# TODO:
-# > freetype2
-# > imgui
-# > stb_image
-
 # glad
 add_subdirectory(glad)
 set_property(TARGET glad PROPERTY FOLDER "3Party")
@@ -24,6 +19,12 @@ target_compile_definitions(glm INTERFACE
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_definitions(glm INTERFACE GLM_FORCE_CXX14)
 endif()
+
+# stb_image
+add_library(stb_image INTERFACE)
+set(STB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/stb)
+target_sources(stb_image INTERFACE ${STB_DIR}/stb_image.h)
+target_include_directories(stb_image INTERFACE ${STB_DIR})
 
 # spdlog
 add_subdirectory(spdlog)
@@ -54,3 +55,6 @@ ${IMGUI_DIR}/backends/imgui_impl_glfw.h
 )
 target_sources(imgui INTERFACE ${IMGUI_SRC})
 target_include_directories(imgui INTERFACE ${IMGUI_DIR})
+
+# freetype2
+add_subdirectory(freetype2)
