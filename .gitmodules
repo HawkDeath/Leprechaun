@@ -1,0 +1,18 @@
+[submodule "3party/stb"]
+	path = 3party/stb
+	url = https://github.com/nothings/stb
+[submodule "3party/freetype2"]
+	path = 3party/freetype2
+	url = https://github.com/freetype/freetype2
+[submodule "3party/glfw"]
+	path = 3party/glfw
+	url = https://github.com/glfw/glfw
+[submodule "3party/glm"]
+	path = 3party/glm
+	url = https://github.com/g-truc/glm
+[submodule "3party/spdlog"]
+	path = 3party/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "3party/imgui"]
+	path = 3party/imgui
+	url = https://github.com/ocornut/imgui
