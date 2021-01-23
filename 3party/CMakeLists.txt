@@ -3,6 +3,7 @@ project(3part LANGUAGES C CXX)
 
 # glad
 add_subdirectory(glad)
+set_property(TARGET glad PROPERTY FOLDER "3Party")
 
 # glm
 add_library(glm INTERFACE)

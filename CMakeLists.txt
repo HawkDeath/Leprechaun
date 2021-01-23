@@ -13,7 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/lib")
 
 add_subdirectory(3party)
-
+add_subdirectory(LeprechaunLib)
 
 # add_dependencies(TestApp LeprechaunLib)
 
