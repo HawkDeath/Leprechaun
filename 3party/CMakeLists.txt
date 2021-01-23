@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 project(3part LANGUAGES C CXX)
 
+# TODO:
+# > freetype2
+# > imgui
+# > stb_image
+
 # glad
 add_subdirectory(glad)
 set_property(TARGET glad PROPERTY FOLDER "3Party")
@@ -32,3 +37,20 @@ option(GLFW_BUILD_INSTALL OFF)
 
 add_subdirectory(glfw)
 set_property(TARGET glfw PROPERTY FOLDER "3Party")
+
+# imgui
+add_library(imgui INTERFACE)
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
+set(IMGUI_SRC
+${IMGUI_DIR}/imgui.cpp
+${IMGUI_DIR}/imgui_demo.cpp
+${IMGUI_DIR}/imgui_draw.cpp
+${IMGUI_DIR}/imgui_tables.cpp
+${IMGUI_DIR}/imgui_widgets.cpp
+${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+${IMGUI_DIR}/backends/imgui_impl_opengl3.h
+${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+${IMGUI_DIR}/backends/imgui_impl_glfw.h
+)
+target_sources(imgui INTERFACE ${IMGUI_SRC})
+target_include_directories(imgui INTERFACE ${IMGUI_DIR})
