@@ -13,7 +13,7 @@ void Input::registerKeyEvent(KeyEvent &keyEvent) {
 
   for (const auto &i : mKeyEvents) {
     if (TestKey(i.second.key, keyEvent.key)) {
-      ELOG("Key is in use")
+      ELOG("Key {} is in use", keyEvent.key)
       return;
     }
   }

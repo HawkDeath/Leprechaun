@@ -1,5 +1,7 @@
 #include <BaseApplication.h>
 
+#include <Log/Log.h>
+
 class Demo final : public Leprechaun::BaseApplication {
 public:
   explicit Demo(int argc, char *argv[]) {
@@ -20,6 +22,7 @@ protected:
     };
 
     input->registerKeyEvent(escapse);
+    glfwSwapInterval(0);
   }
 
   void onUpdate(const float &delta) override {}
