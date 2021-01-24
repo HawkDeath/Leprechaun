@@ -1,11 +1,14 @@
 #include "BaseApplication.h"
 #include <spdlog/spdlog.h>
 
-
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 
 namespace Leprechaun {
 
-BaseApplication::BaseApplication(int argc, char *argv[]) : mWindow(nullptr) {
+BaseApplication::BaseApplication(int argc, char *argv[],
+                                 ApplicationConfig &appConfig)
+    : mWindow(nullptr), mAppConfig(appConfig) {
   (void)argc;
   (void)argv;
 }
@@ -23,22 +26,31 @@ bool BaseApplication::initialize() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  mWindow = glfwCreateWindow(1280, 720, "LeprechaunLib", nullptr, nullptr);
+  mWindow = std::make_unique<Window>(mAppConfig);
 
   if (!mWindow) {
     return false;
   }
 
-  glfwMakeContextCurrent(mWindow);
+  glfwMakeContextCurrent(mWindow->glfwWindow());
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    glfwDestroyWindow(mWindow);
     spdlog::error("Failed to load opengl");
     return false;
   }
 
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+
+  ImGui::StyleColorsDark();
+  const char *glsl_version = "#version 330 core";
+  // Setup Platform/Renderer backends
+  ImGui_ImplGlfw_InitForOpenGL(mWindow->glfwWindow(), true);
+  ImGui_ImplOpenGL3_Init(glsl_version);
+
+  return true;
 }
-void BaseApplication::shutdown() { glfwDestroyWindow(mWindow); }
+void BaseApplication::shutdown() { }
 
 void BaseApplication::run() {
   if (!initialize())
@@ -46,20 +58,32 @@ void BaseApplication::run() {
 
   onInitialize();
 
-  while (!glfwWindowShouldClose(mWindow)) {
+  auto currentTime = glfwGetTime();
+  double deltaTime = currentTime;
+  while (!mWindow->shouldClose()) {
+    currentTime = glfwGetTime();
 
     glfwPollEvents();
 
-    onUpdate(0.0f);
+    onUpdate(static_cast<float>(deltaTime));
 
     int display_w, display_h;
-    glfwGetFramebufferSize(mWindow, &display_w, &display_h);
+    glfwGetFramebufferSize(mWindow->glfwWindow(), &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    {
+      ImGui_ImplOpenGL3_NewFrame();
+      ImGui_ImplGlfw_NewFrame();
+      ImGui::NewFrame();
+    }
     onDraw();
-    glfwSwapBuffers(mWindow);
+
+    // Rendering
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    mWindow->swapBuffer();
+    deltaTime = glfwGetTime() - currentTime;
   }
   onShutdown();
   shutdown();

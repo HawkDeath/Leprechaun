@@ -1,43 +1,23 @@
 #include <BaseApplication.h>
-#include <imgui.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
 
 class Demo : public Leprechaun::BaseApplication {
 public:
-  explicit Demo(int argc, char *argv[])
-      : Leprechaun::BaseApplication(argc, argv) {}
+  explicit Demo(int argc, char *argv[]) {
+    Leprechaun::ApplicationConfig config;
+    Leprechaun::BaseApplication(argc, argv, config);
+  }
   virtual ~Demo() = default;
 
 protected:
-  void onInitialize() override {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+  void onInitialize() override {}
 
-      ImGui::StyleColorsDark();
-    const char *glsl_version = "#version 130";
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-  }
-
-  void onUpdate(const float& delta) override {
-
-  }
+  void onUpdate(const float &delta) override {}
 
   void onDraw() override {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
 
-    // 1. Show the big demo window (Most of the sample code is in
-    // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
-    // ImGui!).
     if (show_demo_window)
       ImGui::ShowDemoWindow(&show_demo_window);
 
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair
-    // to created a named window.
     {
       static float f = 0.0f;
       static int counter = 0;
@@ -81,16 +61,11 @@ protected:
         show_another_window = false;
       ImGui::End();
     }
-
-    // Rendering
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 
 private:
   bool show_demo_window = true;
   bool show_another_window = false;
-
 };
 
 IMPLEMENT_DEMO(Demo)

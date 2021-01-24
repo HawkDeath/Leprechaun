@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "Window/ApplicationConfig.h"
+#include "Window/Window.h"
+
 #include <GLFW/glfw3.h>
 
 #include <imgui.h>
@@ -9,7 +12,8 @@
 namespace Leprechaun {
 class BaseApplication {
 public:
-  explicit BaseApplication(int argc, char *argv[]);
+  explicit BaseApplication() = default;
+  explicit BaseApplication(int argc, char *argv[], ApplicationConfig &appConfig);
   ~BaseApplication();
 
   void run();
@@ -21,12 +25,15 @@ protected:
   virtual void onDraw() {}
 
 protected:
-  GLFWwindow *mWindow; // only for test
+  std::unique_ptr<Window> mWindow;
+  ApplicationConfig mAppConfig;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:
   bool initialize();
   void shutdown();
+
+
 };
 
 } // namespace Leprechaun
