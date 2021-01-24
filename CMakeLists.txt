@@ -14,9 +14,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/lib")
 
 add_subdirectory(3party)
 add_subdirectory(LeprechaunLib)
+add_subdirectory(demo)
+add_dependencies(demo LeprechaunLib)
 
-# add_dependencies(TestApp LeprechaunLib)
-
-#if(MSVC)
-# set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT TestApp)
-#endif()
+if(MSVC)
+ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT demo)
+endif()

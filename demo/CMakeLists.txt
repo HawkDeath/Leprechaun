@@ -1,17 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
-project(LeprechaunLib)
+project(demo)
 
 include_directories(${CMAKE_SOURCE_DIR}/3party)
 include_directories(${CMAKE_SOURCE_DIR}/3party/glad/include)
+include_directories(${CMAKE_SOURCE_DIR}/LeprechaunLib/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-set(BASE_APPLICATION_SOURCES 
-    src/BaseApplication.cpp)
+set(DEMO_SRC main.cpp)
 
-set(ENGINE_LIB_SOURCES ${BASE_APPLICATION_SOURCES})
-
-add_library(${PROJECT_NAME} STATIC ${ENGINE_LIB_SOURCES})
+add_executable(${PROJECT_NAME} ${DEMO_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad glm spdlog imgui stb_image freetype)
+target_link_libraries(${PROJECT_NAME} PRIVATE LeprechaunLib)
