@@ -1,19 +1,22 @@
 #pragma once
-
+// clang-format off
 #include <glad/glad.h>
+// clang-format on
+
 #include "Window/ApplicationConfig.h"
 #include "Window/Window.h"
 
 #include <GLFW/glfw3.h>
-
 #include <imgui.h>
+
 #include <memory>
 
 namespace Leprechaun {
 class BaseApplication {
 public:
   explicit BaseApplication() = default;
-  explicit BaseApplication(int argc, char *argv[], ApplicationConfig &appConfig);
+  explicit BaseApplication(int argc, char *argv[],
+                           ApplicationConfig &appConfig);
   ~BaseApplication();
 
   void run();
@@ -32,8 +35,6 @@ protected:
 private:
   bool initialize();
   void shutdown();
-
-
 };
 
 } // namespace Leprechaun

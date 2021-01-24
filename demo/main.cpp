@@ -1,6 +1,6 @@
 #include <BaseApplication.h>
 
-class Demo : public Leprechaun::BaseApplication {
+class Demo final : public Leprechaun::BaseApplication {
 public:
   explicit Demo(int argc, char *argv[]) {
     Leprechaun::ApplicationConfig config;
@@ -9,7 +9,18 @@ public:
   virtual ~Demo() = default;
 
 protected:
-  void onInitialize() override {}
+  void onInitialize() override {
+    auto input = mWindow->getInput();
+    Leprechaun::KeyEvent escapse;
+    escapse.key = Leprechaun::InputUtils::Key::Escape;
+    escapse.state = Leprechaun::InputUtils::KeyState::Down;
+    escapse.name = "quit_program";
+    escapse.fn = [&]() -> void {
+      glfwSetWindowShouldClose(mWindow->glfwWindow(), GLFW_TRUE);
+    };
+
+    input->registerKeyEvent(escapse);
+  }
 
   void onUpdate(const float &delta) override {}
 

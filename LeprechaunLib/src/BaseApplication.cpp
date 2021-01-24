@@ -1,4 +1,5 @@
 #include "BaseApplication.h"
+#include "Log/Log.h"
 #include <spdlog/spdlog.h>
 
 #include <imgui/backends/imgui_impl_glfw.h>
@@ -17,13 +18,13 @@ BaseApplication::~BaseApplication() { glfwTerminate(); }
 
 bool BaseApplication::initialize() {
   glfwSetErrorCallback([](int error, const char *description) -> void {
-    spdlog::error("[GLFW] {}: {}", error, description);
+    ELOG("[GLFW] {}: {}", error, description);
   });
   if (!glfwInit())
     return false;
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, mAppConfig.openGlSettings.majorVersion);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, mAppConfig.openGlSettings.minorVersion);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   mWindow = std::make_unique<Window>(mAppConfig);
@@ -35,9 +36,12 @@ bool BaseApplication::initialize() {
   glfwMakeContextCurrent(mWindow->glfwWindow());
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    spdlog::error("Failed to load opengl");
+    ELOG("Failed to load opengl");
     return false;
   }
+
+  LOG("OpenGL version {0}", glGetString(GL_VERSION))
+
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -63,7 +67,7 @@ void BaseApplication::run() {
   while (!mWindow->shouldClose()) {
     currentTime = glfwGetTime();
 
-    glfwPollEvents();
+    mWindow->update();
 
     onUpdate(static_cast<float>(deltaTime));
 
