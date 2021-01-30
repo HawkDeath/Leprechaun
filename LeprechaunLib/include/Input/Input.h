@@ -54,6 +54,9 @@ private:
   void updateKeyboard();
   void updateMouse();
 
+  void resetMouseState() noexcept;
+  void resetKeyboardState() noexcept;
+
   void handleKeyInput(int key, int scancode, int action, int mods) noexcept;
   void handleMousePosition(double xPos, double yPos) noexcept;
   void handleMouseButton(int mouseButton, int action, int mods) noexcept;

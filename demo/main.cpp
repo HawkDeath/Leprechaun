@@ -25,7 +25,7 @@ protected:
 
     Leprechaun::KeyEvent test;
     test.key = Leprechaun::InputUtils::Key::Enter;
-    test.state = Leprechaun::InputUtils::KeyState::Down;
+    test.state = Leprechaun::InputUtils::KeyState::Hold;
     test.name = "test_event";
     test.fn = [&]() -> void { LOG("Enter has been pressed") };
 

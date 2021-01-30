@@ -7,14 +7,22 @@ Input::Input(GLFWwindow *window)
       mMousePoistion(0.0f, 0.0f), mMouseDeltaValue(0.0f, 0.0f) {
   mKeyEvents.clear();
   mMouseEvents.clear();
+  resetMouseState();
+  resetKeyboardState();
+}
 
-  for (auto &key : mInteractKeys) {
-    key = InputUtils::KeyState::None;
-  }
+void Input::resetMouseState() noexcept {
   for (auto &button : mInteractMouseButtons) {
     button = InputUtils::KeyState::None;
   }
 }
+
+void Input::resetKeyboardState() noexcept {
+  for (auto &key : mInteractKeys) {
+    key = InputUtils::KeyState::None;
+  }
+}
+
 void Input::registerKeyEvent(KeyEvent &keyEvent) {
   LOG("[INPUT] Keyboard event added \'{0}\'", keyEvent.name)
   mKeyEvents.push_back(std::move(keyEvent));
@@ -45,6 +53,7 @@ void Input::updateKeyboard() {
       _event.fn();
     }
   }
+  resetKeyboardState();
 }
 
 void Input::updateMouse() {
@@ -61,6 +70,7 @@ void Input::updateMouse() {
       _mouseEvent.fn();
     }
   }
+  resetMouseState();
 }
 
 void Input::setCursorMode(InputUtils::CursorMode newMode) {
