@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include <cstdint>
+#include <cstdlib>
 
 namespace Leprechaun {
 namespace InputUtils {
@@ -129,22 +130,14 @@ enum class Key : std::int32_t {
   Count = GLFW_KEY_LAST
 };
 
-inline bool TestKey(const Key &l, const Key &r) {
-  return static_cast<int>(l) == static_cast<int>(r);
-}
-
-enum class KeyState : std::int8_t {
+enum class KeyState : std::int16_t {
   None = 0x0000,
   Down = 0x0001,
   Hold = 0x0010,
   Up = 0x0100
 };
 
-inline bool TestKeyState(const KeyState & l, const KeyState &r) {
-  return static_cast<int>(l) == static_cast<int>(r);
-}
-
-enum class MouseButton : std::int32_t {
+enum class MouseButton : std::size_t {
   Button1 = GLFW_MOUSE_BUTTON_1,
   Button2 = GLFW_MOUSE_BUTTON_2,
   Button3 = GLFW_MOUSE_BUTTON_3,
@@ -159,5 +152,16 @@ enum class MouseButton : std::int32_t {
 };
 
 enum class CursorMode : std::int8_t { Normal, Hided };
+
+inline bool TestKey(const Key &l, const Key &r) noexcept {
+  return static_cast<int>(l) == static_cast<int>(r);
+}
+
+inline bool TestKeyState(const KeyState &l, const KeyState &r) noexcept {
+  return static_cast<int>(l) == static_cast<int>(r);
+}
+
+constexpr size_t NUM_OF_KEYS = static_cast<size_t>(Key::Count);
+
 } // namespace InputUtils
 } // namespace Leprechaun

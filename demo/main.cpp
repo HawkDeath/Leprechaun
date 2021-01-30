@@ -22,6 +22,15 @@ protected:
     };
 
     input->registerKeyEvent(escapse);
+
+    Leprechaun::KeyEvent test;
+    test.key = Leprechaun::InputUtils::Key::Enter;
+    test.state = Leprechaun::InputUtils::KeyState::Down;
+    test.name = "test_event";
+    test.fn = [&]() -> void { LOG("Enter has been pressed") };
+
+    input->registerKeyEvent(test);
+
     glfwSwapInterval(0);
   }
 

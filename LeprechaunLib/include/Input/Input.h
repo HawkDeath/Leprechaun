@@ -6,9 +6,9 @@
 #include <memory>
 #include <string>
 
-#include <utility>
+#include <array>
 #include <unordered_map>
-#include <vector>
+#include <utility>
 
 // TODO:
 // * mouse button events
@@ -35,12 +35,10 @@ struct MouseEvent {
   std::function<void(MousePosition &)> fn = nullptr;
 };
 
-
 class Input final : public std::enable_shared_from_this<Input> {
   friend class Window;
 
 public:
-
   void registerKeyEvent(KeyEvent &keyEvent);
 
 private:
@@ -53,9 +51,8 @@ private:
 
 private:
   Window *mWindow;
-  std::unordered_map<std::string, KeyEvent> mKeyEvents;
-  std::vector<std::pair<InputUtils::Key, InputUtils::KeyState>> keys;
-
+  std::vector<KeyEvent> mKeyEvents;
+  std::array<InputUtils::KeyState, InputUtils::NUM_OF_KEYS> mInteractKeys;
 };
 
 } // namespace Leprechaun
