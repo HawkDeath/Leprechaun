@@ -15,12 +15,13 @@
 namespace Leprechaun {
 
 struct KeyEvent {
-  std::string name;
+  KeyEvent() = default;
+  std::string name = "";
   union {
     InputUtils::Key key;
     InputUtils::MouseButton button;
   };
-  InputUtils::KeyState state;
+  InputUtils::KeyState state = InputUtils::KeyState::None;
 
   std::function<void()> fn = nullptr;
 };
