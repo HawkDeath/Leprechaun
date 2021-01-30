@@ -130,11 +130,11 @@ enum class Key : std::int32_t {
   Count = GLFW_KEY_LAST
 };
 
-enum class KeyState : std::int16_t {
-  None = 0x0000,
+enum class KeyState : std::int32_t {
+  None = 0xFFFF,
+  Up = 0x0000,
   Down = 0x0001,
-  Hold = 0x0010,
-  Up = 0x0100
+  Hold = 0x0002
 };
 
 enum class MouseButton : std::size_t {
@@ -148,7 +148,8 @@ enum class MouseButton : std::size_t {
   Button8 = GLFW_MOUSE_BUTTON_8,
   Left = Button1,
   Middle = Button3,
-  Right = Button2
+  Right = Button2,
+  Count = Button8 + 1,
 };
 
 enum class CursorMode : std::int8_t { Normal, Hided };
@@ -162,6 +163,7 @@ inline bool TestKeyState(const KeyState &l, const KeyState &r) noexcept {
 }
 
 constexpr size_t NUM_OF_KEYS = static_cast<size_t>(Key::Count);
+constexpr size_t NUM_OF_MOUSE_BUTTONS = static_cast<size_t>(MouseButton::Count);
 
 } // namespace InputUtils
 } // namespace Leprechaun

@@ -31,6 +31,14 @@ protected:
 
     input->registerKeyEvent(test);
 
+    Leprechaun::KeyEvent testMouse;
+    testMouse.button = Leprechaun::InputUtils::MouseButton::Left;
+    testMouse.state = Leprechaun::InputUtils::KeyState::Down;
+    testMouse.name = "test_mouse_event";
+    testMouse.fn = [&]() -> void { LOG("Left button has been pressd") };
+
+    input->registerMouseEvent(testMouse);
+
     glfwSwapInterval(0);
   }
 

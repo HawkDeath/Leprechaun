@@ -2,6 +2,8 @@
 
 #include "InputUtils.h"
 
+#include <glm/glm.hpp>
+
 #include <functional>
 #include <memory>
 #include <string>
@@ -10,15 +12,14 @@
 #include <unordered_map>
 #include <utility>
 
-// TODO:
-// * mouse button events
-// * mouse position update
-
 namespace Leprechaun {
 
 struct KeyEvent {
   std::string name;
-  InputUtils::Key key;
+  union {
+    InputUtils::Key key;
+    InputUtils::MouseButton button;
+  };
   InputUtils::KeyState state;
 
   std::function<void()> fn = nullptr;
@@ -40,19 +41,39 @@ class Input final : public std::enable_shared_from_this<Input> {
 
 public:
   void registerKeyEvent(KeyEvent &keyEvent);
+  void registerMouseEvent(KeyEvent &mouseEvent);
+
+  void setCursorMode(InputUtils::CursorMode newMode);
+
+  auto getMousePosition() const noexcept { return mMousePoistion; }
+  auto getMouseDelta() const noexcept { return mMouseDeltaValue; }
 
 private:
-  Input(Window *window);
+  Input(GLFWwindow *window);
   void update();
+  void updateKeyboard();
+  void updateMouse();
 
-  void handleKeyInput(int key, int scancode, int action, int mods);
-  void handleMousePosition(double xPos, double yPos);
-  void handleMouseButton(int mouseButton, int action, int mods);
+  void handleKeyInput(int key, int scancode, int action, int mods) noexcept;
+  void handleMousePosition(double xPos, double yPos) noexcept;
+  void handleMouseButton(int mouseButton, int action, int mods) noexcept;
 
 private:
-  Window *mWindow;
+  GLFWwindow *mWindow;
+
+  // Keyboard support
   std::vector<KeyEvent> mKeyEvents;
   std::array<InputUtils::KeyState, InputUtils::NUM_OF_KEYS> mInteractKeys;
+
+  // Mouse support
+  std::vector<KeyEvent> mMouseEvents;
+  std::array<InputUtils::KeyState, InputUtils::NUM_OF_MOUSE_BUTTONS>
+      mInteractMouseButtons;
+
+  InputUtils::CursorMode mMouseMode;
+
+  glm::vec2 mMousePoistion;
+  glm::vec2 mMouseDeltaValue;
 };
 
 } // namespace Leprechaun

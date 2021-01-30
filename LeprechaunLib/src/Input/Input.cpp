@@ -2,18 +2,37 @@
 #include "Log/Log.h"
 
 namespace Leprechaun {
-Input::Input(Window *window) : mWindow(window) {
+Input::Input(GLFWwindow *window)
+    : mWindow(window), mMouseMode(InputUtils::CursorMode::Normal),
+      mMousePoistion(0.0f, 0.0f), mMouseDeltaValue(0.0f, 0.0f) {
   mKeyEvents.clear();
+  mMouseEvents.clear();
+
   for (auto &key : mInteractKeys) {
     key = InputUtils::KeyState::None;
   }
+  for (auto &button : mInteractMouseButtons) {
+    button = InputUtils::KeyState::None;
+  }
 }
 void Input::registerKeyEvent(KeyEvent &keyEvent) {
-  LOG("[INPUT] Event added \'{0}\'", keyEvent.name)
+  LOG("[INPUT] Keyboard event added \'{0}\'", keyEvent.name)
   mKeyEvents.push_back(std::move(keyEvent));
 }
 
+void Input::registerMouseEvent(KeyEvent &mouseEvent) {
+  LOG("[INPUT] Mouse event added \'{0}\'", mouseEvent.name)
+  mMouseEvents.push_back(std::move(mouseEvent));
+}
+
 void Input::update() {
+  mMouseDeltaValue = {}; // reset
+
+  updateKeyboard();
+  updateMouse();
+}
+
+void Input::updateKeyboard() {
   if (mKeyEvents.empty())
     return;
 
@@ -28,7 +47,45 @@ void Input::update() {
   }
 }
 
-void Input::handleKeyInput(int key, int scancode, int action, int mods) {
+void Input::updateMouse() {
+  if (mMouseEvents.empty())
+    return;
+
+  if (mInteractMouseButtons.empty())
+    return;
+
+  for (auto &_mouseEvent : mMouseEvents) {
+    auto isButtonPress =
+        mInteractMouseButtons[static_cast<int>(_mouseEvent.button)];
+    if (InputUtils::TestKeyState(isButtonPress, _mouseEvent.state)) {
+      _mouseEvent.fn();
+    }
+  }
+}
+
+void Input::setCursorMode(InputUtils::CursorMode newMode) {
+  if (newMode == mMouseMode || mWindow == nullptr)
+    return;
+
+  if (newMode == InputUtils::CursorMode::Normal) {
+    glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  } else if (newMode == InputUtils::CursorMode::Hided) {
+    glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
+
+  mMouseMode = newMode;
+  double xPos, yPos;
+  glfwGetCursorPos(mWindow, &xPos, &yPos);
+
+  mMousePoistion = {static_cast<float>(xPos), static_cast<float>(yPos)};
+  mMouseDeltaValue = {};
+}
+
+void Input::handleKeyInput(int key, int scancode, int action,
+                           int mods) noexcept {
+
+  (void)scancode;
+  (void)mods;
 
   auto currState = static_cast<InputUtils::KeyState>(action);
   mInteractKeys[key] = currState;
@@ -36,8 +93,21 @@ void Input::handleKeyInput(int key, int scancode, int action, int mods) {
   LOG("[INPUT] key {} {}", key, action)
 }
 
-void Input::handleMousePosition(double xPos, double yPos) {}
+void Input::handleMousePosition(double xPos, double yPos) noexcept {
+  glm::vec2 newPosition = {static_cast<float>(xPos), static_cast<float>(yPos)};
 
-void Input::handleMouseButton(int mouseButton, int action, int mods) {}
+  mMouseDeltaValue = newPosition - mMousePoistion;
+  mMousePoistion = newPosition;
+  // LOG("[INPUT] pos {} {}, delta {} {}", mMousePoistion.x, mMousePoistion.y,
+  // mMouseDeltaValue.x, mMouseDeltaValue.y)
+}
+
+void Input::handleMouseButton(int mouseButton, int action, int mods) noexcept {
+  (void)mods;
+  auto currentState = static_cast<InputUtils::KeyState>(action);
+  mInteractMouseButtons[mouseButton] = currentState;
+
+  LOG("[INPUT] button {} {}", mouseButton, action)
+}
 
 } // namespace Leprechaun

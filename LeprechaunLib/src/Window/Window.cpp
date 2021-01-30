@@ -20,7 +20,7 @@ Window::Window(ApplicationConfig &appConfig)
 
   glfwSetWindowUserPointer(mWindow, this);
 
-  mInput = std::shared_ptr<Input>(new Input(this));
+  mInput = std::shared_ptr<Input>(new Input(mWindow));
 
   glfwSetWindowSizeCallback(mWindow, &handleWindowResize);
   glfwSetFramebufferSizeCallback(mWindow, &handleFramebufferResize);
