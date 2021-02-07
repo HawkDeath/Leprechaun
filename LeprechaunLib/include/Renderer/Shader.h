@@ -24,7 +24,9 @@ struct ShaderDescription {
 
 class Shader {
 public:
+  Shader() = default;
   Shader(ShaderDescription &pipeline);
+  Shader(const Shader &) = default;
   ~Shader();
 
   void use() noexcept;

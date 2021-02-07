@@ -1,6 +1,29 @@
 #include <BaseApplication.h>
-
 #include <Log/Log.h>
+#include <Renderer/Shader.h>
+
+namespace shader_test {
+static const char *baseVertexShader =
+    "#version 330 core\n"
+    "layout(location = 0) in vec3 aPos;\n"
+    "layout(location = 1) in vec3 aNormal;\n"
+    "layout(location = 2) in vec2 aTexCoords;\n"
+    "out vec2 TexCoords;\n"
+    "uniform mat4 model;\n"
+    "uniform mat4 view;\n"
+    "uniform mat4 projection;\n"
+    "void main() {\n"
+    "  TexCoords = aTexCoords;\n"
+    "  gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
+    "}\n";
+
+static const char *baseFragmentShader =
+    "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "in vec2 TexCoords;\n"
+    "uniform sampler2D texture_diffuse1;\n"
+    "void main() { FragColor = texture(texture_diffuse1, TexCoords); }";
+} // namespace shader_test
 
 class Demo final : public Leprechaun::BaseApplication {
 public:
@@ -39,6 +62,11 @@ protected:
     testMouse.fn = [&]() -> void { LOG("Left button has been pressd") };
 
     input->registerMouseEvent(testMouse);
+    Leprechaun::Api::ShaderDescription pipelineDesc;
+    pipelineDesc.name = "baseShader";
+    pipelineDesc.vertexShaderSources = shader_test::baseVertexShader;
+    pipelineDesc.fragmenShaderSources = shader_test::baseFragmentShader;
+    baseShader = std::make_unique<Leprechaun::Api::Shader>(pipelineDesc);
 
     glfwSwapInterval(0);
   }
@@ -46,7 +74,7 @@ protected:
   void onUpdate(const float &delta) override {}
 
   void onDraw() override {
-
+    baseShader->use();
     if (show_demo_window)
       ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -93,11 +121,13 @@ protected:
         show_another_window = false;
       ImGui::End();
     }
+    baseShader->unUse();
   }
 
 private:
   bool show_demo_window = true;
   bool show_another_window = false;
+  std::unique_ptr<Leprechaun::Api::Shader> baseShader;
 };
 
 IMPLEMENT_DEMO(Demo)

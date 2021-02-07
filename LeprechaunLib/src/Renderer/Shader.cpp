@@ -101,6 +101,7 @@ void Shader::compileShader() {
   checkCompilerErrors(mProgram, "Program");
   deleteShader(vertexShader);
   deleteShader(fragmentShader);
+  LOG("[Shader] Shader \'{0}\' has been created", mPipeline.name)
 }
 
 void Shader::checkCompilerErrors(GLuint &shader,
