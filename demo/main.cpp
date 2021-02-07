@@ -13,6 +13,7 @@ public:
 protected:
   void onInitialize() override {
     auto input = mWindow->getInput();
+
     Leprechaun::KeyEvent escapse;
     escapse.key = Leprechaun::InputUtils::Key::Escape;
     escapse.state = Leprechaun::InputUtils::KeyState::Down;

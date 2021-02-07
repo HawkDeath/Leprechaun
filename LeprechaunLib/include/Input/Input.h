@@ -12,7 +12,11 @@
 #include <unordered_map>
 #include <utility>
 
+
 namespace Leprechaun {
+
+using InputUtils::NUM_OF_KEYS;
+using InputUtils::NUM_OF_MOUSE_BUTTONS;
 
 struct KeyEvent {
   KeyEvent() = default;
@@ -24,17 +28,6 @@ struct KeyEvent {
   InputUtils::KeyState state = InputUtils::KeyState::None;
 
   std::function<void()> fn = nullptr;
-};
-
-struct MousePosition {
-  double x;
-  double y;
-};
-
-struct MouseEvent {
-  std::string name;
-  InputUtils::MouseButton mouseButton;
-  std::function<void(MousePosition &)> fn = nullptr;
 };
 
 class Input final : public std::enable_shared_from_this<Input> {
@@ -51,6 +44,7 @@ public:
 
 private:
   Input(GLFWwindow *window);
+
   void update();
   void updateKeyboard();
   void updateMouse();
@@ -67,12 +61,11 @@ private:
 
   // Keyboard support
   std::vector<KeyEvent> mKeyEvents;
-  std::array<InputUtils::KeyState, InputUtils::NUM_OF_KEYS> mInteractKeys;
+  std::array<InputUtils::KeyState, NUM_OF_KEYS> mInteractKeys;
 
   // Mouse support
   std::vector<KeyEvent> mMouseEvents;
-  std::array<InputUtils::KeyState, InputUtils::NUM_OF_MOUSE_BUTTONS>
-      mInteractMouseButtons;
+  std::array<InputUtils::KeyState, NUM_OF_MOUSE_BUTTONS> mInteractMouseButtons;
 
   InputUtils::CursorMode mMouseMode;
 
