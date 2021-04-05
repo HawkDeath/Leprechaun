@@ -3,7 +3,7 @@ project(Leprechaun)
 
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-option(LEPRECHAUN_BUILD_DEMO "Leprechaun Demo" FALSE)
+option(LEPRECHAUN_BUILD_DEMO "Leprechaun Demo" OFF)
 
 file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/output")
 file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/output/bin")
@@ -18,7 +18,8 @@ add_subdirectory(LeprechaunLib)
 if(LEPRECHAUN_BUILD_DEMO)
     add_subdirectory(demo)
     add_dependencies(demo LeprechaunLib)
-endif()
+endif(LEPRECHAUN_BUILD_DEMO)
+
 
 if(MSVC)
  set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT demo)
