@@ -72,7 +72,6 @@ void Window::handleKeyInput(GLFWwindow *window_, int key, int scancode,
                             int action, int mods) {
   auto window = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window_));
   auto input = window->mInput;
-  LOG("Key {} {}", key, action)
   input->handleKeyInput(key, scancode, action, mods);
 }
 

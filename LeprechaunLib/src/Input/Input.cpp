@@ -24,12 +24,10 @@ void Input::resetKeyboardState() noexcept {
 }
 
 void Input::registerKeyEvent(KeyEvent &keyEvent) {
-  LOG("[INPUT] Keyboard event added \'{0}\'", keyEvent.name)
   mKeyEvents.push_back(std::move(keyEvent));
 }
 
 void Input::registerMouseEvent(KeyEvent &mouseEvent) {
-  LOG("[INPUT] Mouse event added \'{0}\'", mouseEvent.name)
   mMouseEvents.push_back(std::move(mouseEvent));
 }
 
@@ -99,8 +97,6 @@ void Input::handleKeyInput(int key, int scancode, int action,
 
   auto currState = static_cast<InputUtils::KeyState>(action);
   mInteractKeys[key] = currState;
-
-  LOG("[INPUT] key {} {}", key, action)
 }
 
 void Input::handleMousePosition(double xPos, double yPos) noexcept {
@@ -108,16 +104,12 @@ void Input::handleMousePosition(double xPos, double yPos) noexcept {
 
   mMouseDeltaValue = newPosition - mMousePoistion;
   mMousePoistion = newPosition;
-  // LOG("[INPUT] pos {} {}, delta {} {}", mMousePoistion.x, mMousePoistion.y,
-  // mMouseDeltaValue.x, mMouseDeltaValue.y)
 }
 
 void Input::handleMouseButton(int mouseButton, int action, int mods) noexcept {
   (void)mods;
   auto currentState = static_cast<InputUtils::KeyState>(action);
   mInteractMouseButtons[mouseButton] = currentState;
-
-  LOG("[INPUT] button {} {}", mouseButton, action)
 }
 
 } // namespace Leprechaun
