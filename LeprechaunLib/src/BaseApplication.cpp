@@ -14,7 +14,10 @@ BaseApplication::BaseApplication(int argc, char *argv[],
   (void)argv;
 }
 
-BaseApplication::~BaseApplication() { glfwTerminate(); }
+BaseApplication::~BaseApplication() {
+  mWindow.release();
+  glfwTerminate();
+}
 
 bool BaseApplication::initialize() {
   glfwSetErrorCallback([](int error, const char *description) -> void {
