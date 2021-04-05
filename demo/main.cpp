@@ -71,7 +71,7 @@ protected:
     glfwSwapInterval(0);
   }
 
-  void onUpdate(const float &delta) override {}
+  void onUpdate(const float &delta) override { (void)delta; }
 
   void onDraw() override {
     baseShader->use();

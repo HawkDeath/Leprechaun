@@ -24,7 +24,7 @@ public:
 protected:
   virtual void onInitialize() {}
   virtual void onShutdown() {}
-  virtual void onUpdate(const float &delta) {}
+  virtual void onUpdate(const float &delta) {(void)delta;}
   virtual void onDraw() {}
 
 protected:
