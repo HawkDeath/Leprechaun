@@ -10,10 +10,10 @@ class Texture {
 public:
   Texture(const std::string &name);
   ~Texture() = default;
-  void loadFromMemory(const uint8_t *data, int w, int h) noexcept;
+  void loadFromMemory(const uint8_t *data, int w, int h, GLenum colorMode) noexcept;
   void loadFromFile(const std::string_view filename);
 
-  GLuint getID() noexcept { return mGpuTextureId; }
+  const GLuint &getID() noexcept { return mGpuTextureId; }
 
 private:
   GLuint mGpuTextureId;
