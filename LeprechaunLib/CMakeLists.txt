@@ -14,6 +14,7 @@ set(WINDOW_SOURCES
     src/Window/Window.cpp)
 
 set(RENDERER_SOURCES
+    src/Renderer/Texture.cpp
     src/Renderer/Shader.cpp)
 
 set(BASE_APPLICATION_SOURCES
@@ -23,6 +24,7 @@ set(ENGINE_LIB_SOURCES ${BASE_APPLICATION_SOURCES} ${RENDERER_SOURCES} ${WINDOW_
 
 add_library(${PROJECT_NAME} STATIC ${ENGINE_LIB_SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
