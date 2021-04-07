@@ -10,6 +10,7 @@ Texture::Texture(const std::string &name) : mGpuTextureId{0}, mName{name} {
 }
 void Texture::loadFromFile(const std::string_view filename) {
   int w, h, ch;
+  stbi_set_flip_vertically_on_load(true);
   uint8_t *data = stbi_load(filename.data(), &w, &h, &ch, 0);
 
   loadFromMemory(data, w, h);
