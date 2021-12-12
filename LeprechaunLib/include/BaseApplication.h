@@ -27,6 +27,10 @@ protected:
   virtual void onUpdate(const float &delta) {(void)delta;}
   virtual void onDraw() {}
 
+  ApplicationConfig getConfig() const {
+    return mAppConfig;
+  }
+
 protected:
   std::unique_ptr<Window> mWindow;
   ApplicationConfig mAppConfig;

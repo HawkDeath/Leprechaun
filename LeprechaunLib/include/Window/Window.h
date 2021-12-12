@@ -38,7 +38,7 @@ private:
 private:
   GLFWwindow *mWindow;
   std::shared_ptr<Input> mInput;
-  ApplicationConfig mAppConfig;
+  ApplicationConfig &mAppConfig;
   bool mMinimalized;
 };
 

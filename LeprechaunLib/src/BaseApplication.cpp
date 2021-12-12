@@ -7,9 +7,9 @@
 
 namespace Leprechaun {
 
-BaseApplication::BaseApplication(int argc, char *argv[],
-                                 ApplicationConfig &appConfig)
-    : mWindow(nullptr), mAppConfig(appConfig) {
+  BaseApplication::BaseApplication(int argc, char* argv[],
+    ApplicationConfig& appConfig)
+    : mWindow{nullptr}, mAppConfig{ appConfig } {
   (void)argc;
   (void)argv;
 }

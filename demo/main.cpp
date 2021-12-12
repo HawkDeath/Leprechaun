@@ -49,11 +49,27 @@ protected:
 
     Leprechaun::KeyEvent test;
     test.key = Leprechaun::InputUtils::Key::Enter;
-    test.state = Leprechaun::InputUtils::KeyState::Hold;
+    test.state = Leprechaun::InputUtils::KeyState::Down;
     test.name = "test_event";
     test.fn = [&]() -> void { LOG("Enter has been pressed") };
 
     input->registerKeyEvent(test);
+
+    Leprechaun::KeyEvent test2;
+    test2.key = Leprechaun::InputUtils::Key::W;
+    test2.state = Leprechaun::InputUtils::KeyState::Hold;
+    test2.name = "test2_event";
+    test2.fn = [&]() -> void { LOG(" has been pressed") };
+
+    input->registerKeyEvent(test2);
+
+    Leprechaun::KeyEvent whatWinSize;
+    whatWinSize.key = Leprechaun::InputUtils::Key::F11;
+    whatWinSize.state = Leprechaun::InputUtils::KeyState::Down;
+    whatWinSize.name = "whatWinSize_event";
+    whatWinSize.fn = [this]() -> void { LOG("{}x{}", getConfig().windowSize.width, getConfig().windowSize.height) };
+
+    input->registerKeyEvent(whatWinSize);
 
     Leprechaun::KeyEvent testMouse;
     testMouse.button = Leprechaun::InputUtils::MouseButton::Left;
@@ -128,6 +144,7 @@ private:
   bool show_demo_window = true;
   bool show_another_window = false;
   std::unique_ptr<Leprechaun::Api::Shader> baseShader;
+
 };
 
 IMPLEMENT_DEMO(Demo)

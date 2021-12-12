@@ -1,6 +1,8 @@
 #include "Input/Input.h"
 #include "Log/Log.h"
 
+#define UNUSE(x) (void)x
+
 namespace Leprechaun {
 Input::Input(GLFWwindow *window)
     : mWindow(window), mMouseMode(InputUtils::CursorMode::Normal),
@@ -39,10 +41,7 @@ void Input::update() {
 }
 
 void Input::updateKeyboard() {
-  if (mKeyEvents.empty())
-    return;
-
-  if (mInteractKeys.empty())
+  if (mKeyEvents.empty() || mInteractKeys.empty())
     return;
 
   for (auto &_event : mKeyEvents) {
@@ -55,14 +54,11 @@ void Input::updateKeyboard() {
 }
 
 void Input::updateMouse() {
-  if (mMouseEvents.empty())
-    return;
-
-  if (mInteractMouseButtons.empty())
+  if (mMouseEvents.empty() || mInteractMouseButtons.empty())
     return;
 
   for (auto &_mouseEvent : mMouseEvents) {
-    auto isButtonPress =
+    auto &isButtonPress =
         mInteractMouseButtons[static_cast<int>(_mouseEvent.button)];
     if (InputUtils::TestKeyState(isButtonPress, _mouseEvent.state)) {
       _mouseEvent.fn();
@@ -92,8 +88,8 @@ void Input::setCursorMode(InputUtils::CursorMode newMode) {
 void Input::handleKeyInput(int key, int scancode, int action,
                            int mods) noexcept {
 
-  (void)scancode;
-  (void)mods;
+  UNUSE(scancode);
+  UNUSE(mods);
 
   auto currState = static_cast<InputUtils::KeyState>(action);
   mInteractKeys[key] = currState;
@@ -107,7 +103,7 @@ void Input::handleMousePosition(double xPos, double yPos) noexcept {
 }
 
 void Input::handleMouseButton(int mouseButton, int action, int mods) noexcept {
-  (void)mods;
+  UNUSE(mods);
   auto currentState = static_cast<InputUtils::KeyState>(action);
   mInteractMouseButtons[mouseButton] = currentState;
 }

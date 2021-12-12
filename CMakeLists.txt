@@ -15,10 +15,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/lib")
 
 add_subdirectory(3party)
 add_subdirectory(LeprechaunLib)
-if(LEPRECHAUN_BUILD_DEMO)
+#if(LEPRECHAUN_BUILD_DEMO)
     add_subdirectory(demo)
     add_dependencies(demo LeprechaunLib)
-endif(LEPRECHAUN_BUILD_DEMO)
+#endif(LEPRECHAUN_BUILD_DEMO)
 
 
 if(MSVC)
