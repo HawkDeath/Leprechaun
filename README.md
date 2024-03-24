@@ -12,9 +12,17 @@ To clone a repository use command
 git clone --recursive https://github.com/HawkDeath/Leprechaun.git
 ```
 
+### Deps
+#### Ubuntu:
+```
+sudo apt install libwayland-dev libxkbcommon-dev xorg-dev
+```
+
 ## Branches
 
 * master - LeprechaunLib
+
+
 
 ## 3party software
 * GLFW3
