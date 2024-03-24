@@ -1,9 +1,12 @@
 # IDE
 .vs/
 .vscode/
+.idea/
 CMakeSettings.json
 
 # build output
 build/
+build-debug/
+build-release/
 out/
 output/

@@ -1,6 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 #include <string_view>
+#include <string>
 
 #include <cstdint>
 

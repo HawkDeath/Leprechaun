@@ -11,12 +11,12 @@ Window::Window(ApplicationConfig &appConfig)
       glfwCreateWindow(appConfig.windowSize.width, appConfig.windowSize.height,
                        appConfig.title.c_str(), nullptr, nullptr);
   if (!mWindow) {
-    ELOG("Failed to create window")
+    ELOG("Failed to create window");
   }
   LOG("GLFW {0}.{1}.{2}", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR,
-      GLFW_VERSION_REVISION)
+      GLFW_VERSION_REVISION);
   LOG("Window size: {0}, {1}", appConfig.windowSize.width,
-      appConfig.windowSize.height)
+      appConfig.windowSize.height);
 
   glfwSetWindowUserPointer(mWindow, this);
 
@@ -36,7 +36,7 @@ Window::Window(ApplicationConfig &appConfig)
 
 Window::~Window() {
   if (mWindow) {
-    LOG("Window shutdown")
+    LOG("Window shutdown");
     glfwDestroyWindow(mWindow);
   }
 }

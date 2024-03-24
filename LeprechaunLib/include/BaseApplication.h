@@ -1,7 +1,5 @@
 #pragma once
-// clang-format off
-#include <glad/glad.h>
-// clang-format on
+
 
 #include "Window/ApplicationConfig.h"
 #include "Window/Window.h"

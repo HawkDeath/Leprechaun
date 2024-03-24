@@ -3,7 +3,7 @@
 [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Leprechaun_ill_artlibre_jnl.png/135px-Leprechaun_ill_artlibre_jnl.png">](https://en.wikipedia.org/wiki/Leprechaun)
 
 Leprechaun project is a framework to learn Graphics programming techniques.
-Framework support OpenGL 4.6.
+Framework will support Vulkan API 1.3.
 
 ## Build
 #### Clone
@@ -18,7 +18,7 @@ git clone --recursive https://github.com/HawkDeath/Leprechaun.git
 
 ## 3party software
 * GLFW3
-* OpenGL 4.6
+* Vulkan 1.3 (soon)
 * glm
 * Imgui
 * stb

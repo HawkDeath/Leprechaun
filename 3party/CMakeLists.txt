@@ -1,9 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(3part LANGUAGES C CXX)
-
-# glad
-add_subdirectory(glad)
-set_property(TARGET glad PROPERTY FOLDER "3Party")
 
 # glm
 add_library(glm INTERFACE)

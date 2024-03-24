@@ -35,16 +35,7 @@ bool BaseApplication::initialize() {
   if (!mWindow) {
     return false;
   }
-
-  glfwMakeContextCurrent(mWindow->glfwWindow());
-
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    ELOG("Failed to load opengl");
-    return false;
-  }
-
-  LOG("OpenGL version {0}", glGetString(GL_VERSION))
-
+  
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
