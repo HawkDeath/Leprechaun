@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(LeprechaunLib)
 
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
@@ -14,8 +14,8 @@ set(WINDOW_SOURCES
     src/Window/Window.cpp)
 
 set(RENDERER_SOURCES
-    src/Renderer/Texture.cpp
-    src/Renderer/Shader.cpp)
+
+    )
 
 set(BASE_APPLICATION_SOURCES
     src/BaseApplication.cpp)
@@ -27,6 +27,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party/Vulkan-Headers/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party/glad/include>)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm spdlog imgui stb_image freetype)
+    )
+target_link_libraries(${PROJECT_NAME} PRIVATE volk vulkan glfw glm spdlog imgui stb_image freetype)

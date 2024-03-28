@@ -2,8 +2,6 @@
 #include "Log/Log.h"
 #include <spdlog/spdlog.h>
 
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
 
 namespace Leprechaun {
 
@@ -35,16 +33,6 @@ bool BaseApplication::initialize() {
   if (!mWindow) {
     return false;
   }
-  
-
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-
-  ImGui::StyleColorsDark();
-  const char *glsl_version = "#version 330 core";
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(mWindow->glfwWindow(), true);
-  ImGui_ImplOpenGL3_Init(glsl_version);
 
   return true;
 }
@@ -67,19 +55,11 @@ void BaseApplication::run() {
 
     int display_w, display_h;
     glfwGetFramebufferSize(mWindow->glfwWindow(), &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    {
-      ImGui_ImplOpenGL3_NewFrame();
-      ImGui_ImplGlfw_NewFrame();
-      ImGui::NewFrame();
-    }
+
     onDraw();
 
     // Rendering
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
     mWindow->swapBuffer();
     deltaTime = glfwGetTime() - currentTime;
   }
