@@ -7,8 +7,6 @@ set(VULKAN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Vulkan-Headers/include)
 target_sources(vulkan INTERFACE ${VULKAN_INCLUDE_DIR}/vulkan/vulkan.h)
 target_include_directories(vulkan INTERFACE ${VULKAN_INCLUDE_DIR})
 
-target_compile_definitions(vulkan INTERFACE VK_NO_PROTOTYPES)
-
 if (WIN32)
     target_compile_definitions(vulkan INTERFACE VK_USE_PLATFORM_WIN32_KHR)
 elseif (UNIX)
