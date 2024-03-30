@@ -13,11 +13,6 @@ struct ApplicationConfig {
   } windowSize;
 
   struct {
-    std::int32_t majorVersion = 4;
-    std::int32_t minorVersion = 6;
-  } openGlSettings;
-
-  struct {
     std::int32_t width = 1280;
     std::int32_t height = 720;
   } framebufferSize;

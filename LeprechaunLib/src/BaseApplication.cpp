@@ -24,13 +24,12 @@ bool BaseApplication::initialize() {
   if (!glfwInit())
     return false;
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, mAppConfig.openGlSettings.majorVersion);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, mAppConfig.openGlSettings.minorVersion);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
   mWindow = std::make_unique<Window>(mAppConfig);
 
   if (!mWindow) {
+      ELOG("Failed to create window");
     return false;
   }
 

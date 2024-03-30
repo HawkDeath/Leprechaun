@@ -1,5 +1,8 @@
 #pragma once
 #include <spdlog/spdlog.h>
+#include <stdexcept>
+
+#define RT_THROW(msg) throw std::runtime_error(msg);
 
 #define LOG(...)                                                               \
   do {                                                                         \
