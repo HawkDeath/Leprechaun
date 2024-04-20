@@ -3,7 +3,9 @@ TODO
 24/03/2024
 + add Vulkan headers - VOLK? or custom loader - DONE
 + remove OpenGL - done
+20/04/2024
++ add loger class - done
 
-+ add loger class
+
 + Add device abstraction class
 + add Vulkan device class

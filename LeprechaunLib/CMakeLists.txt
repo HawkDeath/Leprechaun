@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-set(COMMON_SOURCE)
+set(COMMON_SOURCE
+    src/Log/Logger.cpp
+)
 
 set(INPUT_SOURCES
     src/Input/Input.cpp)

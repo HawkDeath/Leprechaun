@@ -1,18 +1,22 @@
-#pragma once
-#include <spdlog/spdlog.h>
+#ifndef LEPRECHAUN_LOG_H
+#define LEPRECHAUN_LOG_H
+#include "Logger.h"
 #include <stdexcept>
 
 #define RT_THROW(msg) throw std::runtime_error(msg);
 
 #define LOG(...)                                                               \
   do {                                                                         \
-    spdlog::info(__VA_ARGS__);                                                 \
+    Leprechaun::Logger::print_info(__VA_ARGS__);                               \
   } while (0)
 #define WLOG(...)                                                              \
   do {                                                                         \
-    spdlog::warn(__VA_ARGS__);                                                 \
+    Leprechaun::Logger::print_warning(__VA_ARGS__);                            \
   } while (0)
 #define ELOG(...)                                                              \
   do {                                                                         \
-    spdlog::error(__VA_ARGS__);                                                \
+    Leprechaun::Logger::print_error(__VA_ARGS__);                              \
   } while (0)
+
+
+#endif // LEPRECHAUN_LOG_H
