@@ -1,28 +1,35 @@
 #ifndef LEPRECHAUN_LOGGER_H
 #define LEPRECHAUN_LOGGER_H
 
-#include <spdlog/sinks/basic_file_sink.h>
 #include <memory>
+#include <string>
 
+namespace spdlog {
+    class logger;
+}
 namespace Leprechaun
 {
     class Logger
     {
     public:
-        template<typename FormatString, typename... Args>
-        static void print_info(const FormatString &fmt, Args&&...args);
+        Logger();
 
         template<typename FormatString, typename... Args>
-        static void print_error(const FormatString &fmt, Args&&...args);
+        void print_info(const FormatString &fmt, Args&&...args);
 
         template<typename FormatString, typename... Args>
-        static void print_warning(const FormatString &fmt, Args&&...args);
+        void print_error(const FormatString &fmt, Args&&...args);
 
-        static std::string default_logger_name()  { return "leprechaun-logger"; }
+        template<typename FormatString, typename... Args>
+        void print_warning(const FormatString &fmt, Args&&...args);
+
+        std::string default_logger_name()  { return "leprechaun-logger"; }
 
     private:
-        static std::shared_ptr<spdlog::logger> logger_handle;
+        std::shared_ptr<spdlog::logger> logger_handle;
     };
+    static Logger get_logger() { static Logger log; return log;}
 }
+
 
 #endif //LEPRECHAUN_LOGGER_H

@@ -15,8 +15,14 @@ set(INPUT_SOURCES
 set(WINDOW_SOURCES
     src/Window/Window.cpp)
 
-set(RENDERER_SOURCES
+set(VULKAN_RENDER_SOURCES
+        src/Render/gapi_vk/VulkanApiDevice.cpp
+        src/Render/VulkanApiBackend.cpp
+)
 
+set(RENDERER_SOURCES
+        ${VULKAN_RENDER_SOURCES}
+    src/Render/Device.cpp
     )
 
 set(BASE_APPLICATION_SOURCES

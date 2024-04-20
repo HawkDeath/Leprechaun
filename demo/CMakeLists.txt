@@ -11,5 +11,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/3party>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/LeprechaunLib/include>)
+MESSAGE(STATUS "libdirs: " ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw glm spdlog volk vulkan)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/LeprechaunLib.lib volk vulkan)

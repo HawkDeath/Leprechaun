@@ -17,7 +17,7 @@ public:
 
   void update();
 
-  GLFWwindow *glfwWindow() const noexcept { return mWindow; }
+  [[nodiscard]] GLFWwindow *glfwWindow() const noexcept { return mWindow; }
   std::shared_ptr<Input> getInput() const noexcept { return mInput; }
 
   bool shouldClose() const { return glfwWindowShouldClose(mWindow); }

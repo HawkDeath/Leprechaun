@@ -7,15 +7,15 @@
 
 #define LOG(...)                                                               \
   do {                                                                         \
-    Leprechaun::Logger::print_info(__VA_ARGS__);                               \
+    Leprechaun::get_logger().print_info(__VA_ARGS__);                         \
   } while (0)
 #define WLOG(...)                                                              \
   do {                                                                         \
-    Leprechaun::Logger::print_warning(__VA_ARGS__);                            \
+    Leprechaun::get_logger().print_warning(__VA_ARGS__);                      \
   } while (0)
 #define ELOG(...)                                                              \
   do {                                                                         \
-    Leprechaun::Logger::print_error(__VA_ARGS__);                              \
+    Leprechaun::get_logger().print_error(__VA_ARGS__);                        \
   } while (0)
 
 

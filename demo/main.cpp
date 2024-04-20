@@ -130,7 +130,10 @@ IMPLEMENT_DEMO(Demo)
 */
 #include <volk/volk.h>
 #include <vulkan/vulkan.h>
-#include <spdlog/spdlog.h>
+#include "Log/Log.h"
+
+#include "Render/Device.h"
+#include "Render/VulkanApiBackend.h"
 
 int main()
 {
@@ -139,8 +142,11 @@ int main()
     uint32_t api_version;
     vkEnumerateInstanceVersion(&api_version);
 
-    spdlog::info("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
+    LOG("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
                  VK_API_VERSION_PATCH(api_version));
+
+    Leprechaun::VulkanApiBackend vkApi;
+    Leprechaun::Device device{vkApi};
 
     return 0;
 }
