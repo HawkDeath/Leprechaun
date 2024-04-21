@@ -137,13 +137,13 @@ IMPLEMENT_DEMO(Demo)
 
 int main()
 {
-    VkResult result = volkInitialize();
-
-    uint32_t api_version;
-    vkEnumerateInstanceVersion(&api_version);
-
-    LOG("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
-                 VK_API_VERSION_PATCH(api_version));
+//    VkResult result = volkInitialize();
+//
+//    uint32_t api_version;
+//    vkEnumerateInstanceVersion(&api_version);
+//
+//    LOG("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
+//                 VK_API_VERSION_PATCH(api_version));
 
     Leprechaun::VulkanApiBackend vkApi;
     Leprechaun::Device device{vkApi};

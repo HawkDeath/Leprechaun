@@ -1,5 +1,6 @@
 #ifndef LEPRECHAUN_LOG_H
 #define LEPRECHAUN_LOG_H
+
 #include "Logger.h"
 #include <stdexcept>
 
