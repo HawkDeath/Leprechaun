@@ -1,5 +1,5 @@
-#define  VK_NO_PROTOTYPES
-
+#define VK_NO_PROTOTYPES
+#include <vulkan/vulkan.h>
 #include <volk/volk.h>
 #include "Render/gapi_vk/VulkanApiDevice.h"
 
@@ -49,6 +49,7 @@ namespace Leprechaun {
         instanceCreateInfo.ppEnabledExtensionNames = extensions_name.data();
 
         VK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &m_instance), "Failed to create VkInstance");
+        volkLoadInstance(m_instance);
 
         for (auto &ext_name: extensions_name) {
             delete ext_name;
@@ -57,9 +58,10 @@ namespace Leprechaun {
 
         uint32_t physicalDeviceCount = 0u;
         vkEnumeratePhysicalDevices(m_instance, &physicalDeviceCount, nullptr);
+        if (physicalDeviceCount == 0u) { RT_THROW("Not found gpu supported Vulkan API"); }
+
         std::vector<VkPhysicalDevice> gpus(physicalDeviceCount);
         vkEnumeratePhysicalDevices(m_instance, &physicalDeviceCount, gpus.data());
-        if (gpus.empty()) { RT_THROW("Not found gpu supported Vulkan API"); }
         LOG("Found {} gpu(s)", physicalDeviceCount);
 
         for (auto &gpu: gpus) {
