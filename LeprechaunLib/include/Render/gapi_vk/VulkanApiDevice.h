@@ -13,6 +13,7 @@ namespace Leprechaun
         VulkanApiDevice();
         virtual ~VulkanApiDevice();
 
+        VkPhysicalDeviceProperties device_properties;
 
     private:
         VkInstance m_instance{};

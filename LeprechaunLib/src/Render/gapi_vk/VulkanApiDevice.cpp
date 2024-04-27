@@ -1,4 +1,5 @@
 #define VK_NO_PROTOTYPES
+
 #include <vulkan/vulkan.h>
 #include <volk/volk.h>
 #include "Render/gapi_vk/VulkanApiDevice.h"
@@ -68,12 +69,17 @@ namespace Leprechaun {
             VkPhysicalDeviceProperties props;
             vkGetPhysicalDeviceProperties(gpu, &props);
             if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-                LOG("Choosen {}", props.deviceName);
+                LOG("Chosen \'{}\'", props.deviceName);
                 m_physical_device = gpu;
                 break;
             }
         }
-        if (m_physical_device == VK_NULL_HANDLE) m_physical_device = gpus[0];
+        if (m_physical_device == VK_NULL_HANDLE) {
+            m_physical_device = gpus[0];
+            vkGetPhysicalDeviceProperties(m_physical_device, &device_properties);
+            LOG("Chosen \'{}\'", device_properties.deviceName);
+        }
+
 
         VkDeviceCreateInfo deviceCreateinfo = {};
         deviceCreateinfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -85,6 +91,7 @@ namespace Leprechaun {
     }
 
     VulkanApiDevice::~VulkanApiDevice() {
+        vkDestroyDevice(m_device, nullptr);
         vkDestroyInstance(m_instance, nullptr);
     }
 }
