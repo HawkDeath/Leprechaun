@@ -11,6 +11,7 @@ namespace Leprechaun
         explicit VulkanApiBackend() = default;
         virtual ~VulkanApiBackend() = default;
 
+        // TODO: maybe unique_ptr will be better then raw pointer
         ApiDevice* createDevice() override;
         void destroyDevice(ApiDevice* d) override;
 

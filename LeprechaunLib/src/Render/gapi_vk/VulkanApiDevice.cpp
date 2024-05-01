@@ -10,6 +10,11 @@
 #include <vector>
 #include <string>
 
+// TODO: resolve this in another way
+const std::vector<const char*> deviceExtensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
 namespace Leprechaun {
     VulkanApiDevice::VulkanApiDevice() {
         VkResult vulkan_loader = volkInitialize();
@@ -80,11 +85,63 @@ namespace Leprechaun {
             vkGetPhysicalDeviceProperties(m_physical_device, &device_properties);
             LOG("Chosen \'{}\'", device_properties.deviceName);
         }
+        VkPhysicalDeviceFeatures reqested_features = {};
+        reqested_features.samplerAnisotropy = VK_TRUE;
+
+        // get all families queues
+        uint32_t queueFamiliesCount = 0u;
+        vkGetPhysicalDeviceQueueFamilyProperties(m_physical_device, &queueFamiliesCount, nullptr);
+        if (queueFamiliesCount == 0u) { RT_THROW("Cannot find ANY validate queue on GPU"); }
+        std::vector<VkQueueFamilyProperties> queueFamilies(queueFamiliesCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(m_physical_device, &queueFamiliesCount, queueFamilies.data());
+        for (uint32_t i = 0; i < queueFamilies.size(); ++i)
+        {
+            if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT )
+            {
+                families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Graphics, .index_family = i });
+                VkBool32 presentSupported = false;
+                // TODO: add surface support
+                // vkGetPhysicalDeviceSurfaceSupportKHR(m_physical_device, i, surface, &presentSupported);
+                if (presentSupported)
+                    families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Present, .index_family = i });
+
+                continue;
+            }
+
+            if (queueFamilies[i].queueFlags & VK_QUEUE_COMPUTE_BIT )
+            {
+                families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Compute, .index_family = i });
+                continue;
+            }
+
+        }
+
+        float prio = 1.0f;
+        std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+        for (auto &queue : families_queues)
+        {
+            VkDeviceQueueCreateInfo queueCreateInfo = {};
+            queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queueCreateInfo.queueCount = 1u;
+            queueCreateInfo.pQueuePriorities = &prio;
+            queueCreateInfo.queueFamilyIndex = queue.index_family.value();
+            std::string strQueueType;
+            if (queue.type == vk::QueueType::Graphics) strQueueType = "Graphics";
+            if (queue.type == vk::QueueType::Compute) strQueueType = "Compute";
+            if (queue.type == vk::QueueType::Present) strQueueType = "Present";
+            LOG("Preparing queue for {}", strQueueType);
+            queueCreateInfos.push_back(queueCreateInfo);
+        }
 
 
         VkDeviceCreateInfo deviceCreateinfo = {};
         deviceCreateinfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         deviceCreateinfo.pNext = VK_NULL_HANDLE;
+        deviceCreateinfo.pEnabledFeatures = &reqested_features;
+        deviceCreateinfo.pQueueCreateInfos = queueCreateInfos.data();
+        deviceCreateinfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+        deviceCreateinfo.ppEnabledExtensionNames = deviceExtensions.data();
+        deviceCreateinfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
 
         VK_CHECK(vkCreateDevice(m_physical_device, &deviceCreateinfo, nullptr, &m_device),
                  "Failed to create Vulkan Logical device");
