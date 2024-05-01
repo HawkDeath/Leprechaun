@@ -4,6 +4,7 @@
 #include <volk/volk.h>
 #include "Render/gapi_vk/VulkanApiDevice.h"
 
+
 #include "Log/Log.h"
 
 #include <vector>
@@ -94,4 +95,5 @@ namespace Leprechaun {
         vkDestroyDevice(m_device, nullptr);
         vkDestroyInstance(m_instance, nullptr);
     }
+
 }
