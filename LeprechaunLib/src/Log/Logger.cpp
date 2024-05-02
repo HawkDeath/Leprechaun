@@ -11,7 +11,7 @@ namespace Leprechaun {
     Logger::Logger() {
         std::vector<spdlog::sink_ptr> sinks;
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-        sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>("logs/log.txt", 23, 59));
+        sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>("logs/log.txt", 23, 59, true));
         logger_handle = std::make_shared<spdlog::logger>(default_logger_name(), sinks.begin(), sinks.end());
         spdlog::register_logger(logger_handle);
     }
