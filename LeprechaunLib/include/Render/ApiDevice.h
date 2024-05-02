@@ -1,10 +1,5 @@
-//
-// Created by patry on 4/20/2024.
-//
-
 #ifndef LEPRECHAUN_APIDEVICE_H
 #define LEPRECHAUN_APIDEVICE_H
-
 
 namespace Leprechaun
 {
@@ -24,4 +19,4 @@ namespace Leprechaun
     };
 }
 
-#endif //LEPRECHAUN_APIDEVICE_H
+#endif // LEPRECHAUN_APIDEVICE_H

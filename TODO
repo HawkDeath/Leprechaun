@@ -7,6 +7,8 @@ TODO
 + add loger class - done
 
 + fix logger xd
++ fix build system - problem with GLFW include
++ fix queue creating
 
 + Add device abstraction class
-+ add Vulkan device class
++ add Vulkan device class - in progress

@@ -1,3 +1,4 @@
+#if 0
 #include "BaseApplication.h"
 #include "Log/Log.h"
 #include <spdlog/spdlog.h>
@@ -67,3 +68,4 @@ void BaseApplication::run() {
 }
 
 } // namespace Leprechaun
+#endif

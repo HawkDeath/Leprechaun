@@ -1,6 +1,6 @@
-#pragma once
-
-
+#ifndef LEPRECHAUN_BASE_APPLICATION_H
+#define LEPRECHAUN_BASE_APPLICATION_H
+#if 0
 #include "Window/ApplicationConfig.h"
 #include "Window/Window.h"
 
@@ -48,3 +48,5 @@ private:
     app->run();                                                                \
     return 0;                                                                  \
   }
+#endif // 0
+#endif // LEPRECHAUN_BASE_APPLICATION_H

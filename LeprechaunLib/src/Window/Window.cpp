@@ -7,6 +7,12 @@ namespace Leprechaun {
 Window::Window(ApplicationConfig &appConfig)
     : mWindow(nullptr), mInput(nullptr), mAppConfig(appConfig),
       mMinimalized(false) {
+    glfwSetErrorCallback([](int code, const char* desc) -> void {
+       ELOG("[GLFW] Failed to init the GLFW");
+    });
+    glfwInit();
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
   mWindow =
       glfwCreateWindow(appConfig.windowSize.width, appConfig.windowSize.height,
                        appConfig.title.c_str(), nullptr, nullptr);
@@ -48,6 +54,24 @@ void Window::update() {
   } else {
     glfwPollEvents();
   }
+}
+
+void Window::createVkSurface(VkInstance &instance, VkSurfaceKHR &surface)
+{
+    VK_CHECK(glfwCreateWindowSurface(instance, mWindow, nullptr, &surface), "Failed to create surface");
+}
+
+std::vector<const char*> Window::get_vk_extensions() const
+{
+    uint32_t glfw_extensions_count = 0u;
+    const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extensions_count);
+    std::vector<const char*> extensions(glfw_extensions, glfw_extensions + glfw_extensions_count);
+    LOG("Available extensions:");
+    for (auto &e : extensions)
+    {
+        LOG("\t - {}", e);
+    }
+    return extensions;
 }
 
 void Window::handleFramebufferResize(GLFWwindow *window_, int w, int h) {

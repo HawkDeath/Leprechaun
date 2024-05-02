@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef LEPRECHAUN_APPLICATIONCONFIG_H
+#define LEPRECHAUN_APPLICATIONCONFIG_H
 #include <cstdint>
 #include <string>
 
@@ -22,3 +22,5 @@ struct ApplicationConfig {
 };
 
 }
+
+#endif // LEPRECHAUN_APPLICATIONCONFIG_H

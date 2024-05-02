@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LEPRECHAUN_INPUT_H
+#define LEPRECHAUN_INPUT_H
 
 #include "InputUtils.h"
 
@@ -74,3 +75,5 @@ private:
 };
 
 } // namespace Leprechaun
+
+#endif // LEPRECHAUN_INPUT_H

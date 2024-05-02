@@ -4,19 +4,19 @@
 #include <volk/volk.h>
 #include "Render/gapi_vk/VulkanApiDevice.h"
 
-
+#include "Window/Window.h"
 #include "Log/Log.h"
 
 #include <vector>
 #include <string>
 
 // TODO: resolve this in another way
-const std::vector<const char*> deviceExtensions = {
+const std::vector<const char *> deviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
 namespace Leprechaun {
-    VulkanApiDevice::VulkanApiDevice() {
+    VulkanApiDevice::VulkanApiDevice(Window &win) : m_window{win} {
         VkResult vulkan_loader = volkInitialize();
         if (vulkan_loader != VK_SUCCESS) { RT_THROW("Failed to load vulkan driver"); }
         VkApplicationInfo appInfo = {};
@@ -35,33 +35,14 @@ namespace Leprechaun {
         instanceCreateInfo.pApplicationInfo = &appInfo;
         instanceCreateInfo.enabledLayerCount = 0u;
 
-        // get all extensions
-        uint32_t extensionsCount = 0u;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, nullptr);
-        std::vector<VkExtensionProperties> extensions(extensionsCount);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionsCount, extensions.data());
 
-        std::vector<char *> extensions_name(extensions.size());
-        uint32_t i = 0u;
-        for (auto &ext: extensions) {
-            extensions_name[i] = new char[VK_MAX_EXTENSION_NAME_SIZE];
-            std::strcpy(extensions_name[i], ext.extensionName);
-
-            LOG("{}", extensions_name[i]);
-            i++;
-        }
-        extensions.clear();
-
+        auto extensions_name = m_window.get_vk_extensions();
         instanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(extensions_name.size());
         instanceCreateInfo.ppEnabledExtensionNames = extensions_name.data();
 
         VK_CHECK(vkCreateInstance(&instanceCreateInfo, nullptr, &m_instance), "Failed to create VkInstance");
         volkLoadInstance(m_instance);
 
-        for (auto &ext_name: extensions_name) {
-            delete ext_name;
-        }
-        extensions_name.clear();
 
         uint32_t physicalDeviceCount = 0u;
         vkEnumeratePhysicalDevices(m_instance, &physicalDeviceCount, nullptr);
@@ -85,6 +66,10 @@ namespace Leprechaun {
             vkGetPhysicalDeviceProperties(m_physical_device, &device_properties);
             LOG("Chosen \'{}\'", device_properties.deviceName);
         }
+
+        // Create surface
+        m_window.createVkSurface(m_instance, m_surface);
+
         VkPhysicalDeviceFeatures reqested_features = {};
         reqested_features.samplerAnisotropy = VK_TRUE;
 
@@ -94,45 +79,51 @@ namespace Leprechaun {
         if (queueFamiliesCount == 0u) { RT_THROW("Cannot find ANY validate queue on GPU"); }
         std::vector<VkQueueFamilyProperties> queueFamilies(queueFamiliesCount);
         vkGetPhysicalDeviceQueueFamilyProperties(m_physical_device, &queueFamiliesCount, queueFamilies.data());
-        for (uint32_t i = 0; i < queueFamilies.size(); ++i)
-        {
-            if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT )
+        uint32_t graphics_family_queue_idx = 0u;
+        uint32_t present_family_queue_idx = 0u;
+        uint32_t compute_family_queue_idx = 0u;
+        bool presentQueueHasBeenFound = false;
+        for (uint32_t i = 0u; i < queueFamilies.size(); i++) {
+            if (!presentQueueHasBeenFound)
             {
-                families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Graphics, .index_family = i });
                 VkBool32 presentSupported = false;
-                // TODO: add surface support
-                // vkGetPhysicalDeviceSurfaceSupportKHR(m_physical_device, i, surface, &presentSupported);
-                if (presentSupported)
-                    families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Present, .index_family = i });
 
+                vkGetPhysicalDeviceSurfaceSupportKHR(m_physical_device, i, m_surface, &presentSupported);
+                if (presentSupported) {
+                    families_queues.push_back(vk::QueueFamily{.type = vk::QueueType::Present, .index_family = i});
+                    present_family_queue_idx = i;
+                }
+                presentQueueHasBeenFound = true;
+            }
+
+            if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+                families_queues.push_back(vk::QueueFamily{.type = vk::QueueType::Graphics, .index_family = i});
+                graphics_family_queue_idx = i;
                 continue;
             }
 
-            if (queueFamilies[i].queueFlags & VK_QUEUE_COMPUTE_BIT )
-            {
-                families_queues.push_back(vk::QueueFamily{ .type = vk::QueueType::Compute, .index_family = i });
+            if (queueFamilies[i].queueFlags & VK_QUEUE_COMPUTE_BIT) {
+                families_queues.push_back(vk::QueueFamily{.type = vk::QueueType::Compute, .index_family = i});
+                compute_family_queue_idx = i;
                 continue;
             }
-
         }
 
         float prio = 1.0f;
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-        for (auto &queue : families_queues)
-        {
+        for (auto &queue: families_queues) {
             VkDeviceQueueCreateInfo queueCreateInfo = {};
             queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queueCreateInfo.queueCount = 1u;
             queueCreateInfo.pQueuePriorities = &prio;
             queueCreateInfo.queueFamilyIndex = queue.index_family.value();
-            std::string strQueueType;
+            std::string strQueueType = {};
             if (queue.type == vk::QueueType::Graphics) strQueueType = "Graphics";
             if (queue.type == vk::QueueType::Compute) strQueueType = "Compute";
             if (queue.type == vk::QueueType::Present) strQueueType = "Present";
             LOG("Preparing queue for {}", strQueueType);
             queueCreateInfos.push_back(queueCreateInfo);
         }
-
 
         VkDeviceCreateInfo deviceCreateinfo = {};
         deviceCreateinfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -146,10 +137,17 @@ namespace Leprechaun {
         VK_CHECK(vkCreateDevice(m_physical_device, &deviceCreateinfo, nullptr, &m_device),
                  "Failed to create Vulkan Logical device");
 
+        vkGetDeviceQueue(m_device, graphics_family_queue_idx, 0u, &m_graphics_queue);
+        if (m_graphics_queue == VK_NULL_HANDLE) { RT_THROW("Failed to get graphcis queue handle"); }
+        vkGetDeviceQueue(m_device, present_family_queue_idx, 0u, &m_present_queue);
+        if (m_present_queue == VK_NULL_HANDLE) { RT_THROW("Failed to get present queue handle"); }
+        vkGetDeviceQueue(m_device, compute_family_queue_idx, 0u, &m_compute_queue);
+        if (m_compute_queue == VK_NULL_HANDLE) { RT_THROW("Failed to get compute queue handle"); }
     }
 
     VulkanApiDevice::~VulkanApiDevice() {
         vkDestroyDevice(m_device, nullptr);
+        vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
         vkDestroyInstance(m_instance, nullptr);
     }
 

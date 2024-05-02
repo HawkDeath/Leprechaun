@@ -35,8 +35,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party/glfw/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../3party/Vulkan-Headers/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     )
-target_link_libraries(${PROJECT_NAME} PRIVATE volk vulkan glfw glm spdlog::spdlog_header_only imgui stb_image freetype)
+target_link_libraries(${PROJECT_NAME} PRIVATE volk vulkan glm glfw spdlog::spdlog_header_only imgui stb_image freetype)
 

@@ -128,25 +128,26 @@ private:
 
 IMPLEMENT_DEMO(Demo)
 */
-#include <volk/volk.h>
 #include <vulkan/vulkan.h>
-#include "Log/Log.h"
 
+#include "Log/Log.h"
+#include "Window/Window.h"
 #include "Render/Device.h"
 #include "Render/VulkanApiBackend.h"
 
 int main()
 {
-    VkResult result = volkInitialize();
-    if (result != VK_SUCCESS) return -1;
+    Leprechaun::ApplicationConfig config = Leprechaun::Window::default_window_config();
+    Leprechaun::Window main_window { config } ;
+
+    Leprechaun::VulkanApiBackend vkApi {main_window};
+    Leprechaun::Device device{vkApi};
     uint32_t api_version;
     vkEnumerateInstanceVersion(&api_version);
 
     /*LOG("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
                  VK_API_VERSION_PATCH(api_version));*/
 
-    Leprechaun::VulkanApiBackend vkApi;
-    Leprechaun::Device device{vkApi};
 
     return 0;
 }

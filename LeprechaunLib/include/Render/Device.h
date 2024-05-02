@@ -2,7 +2,6 @@
 #define LEPRECHAUN_DEVICE_H
 
 #include "RenderApiBackendAbstraction.h"
-
 #include <memory>
 
 namespace Leprechaun
@@ -18,6 +17,7 @@ namespace Leprechaun
 
     private:
         RenderApiBackendAbstraction &renderApi;
+
         ApiDevice* device;
     };
 }
