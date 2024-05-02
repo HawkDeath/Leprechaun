@@ -7,6 +7,7 @@
 #include "Window/Window.h"
 #include "Log/Log.h"
 
+#include <set>
 #include <vector>
 #include <string>
 
@@ -108,20 +109,15 @@ namespace Leprechaun {
                 continue;
             }
         }
-
+        std::set<uint32_t> queues_ids = {graphics_family_queue_idx, present_family_queue_idx, compute_family_queue_idx};
         float prio = 1.0f;
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-        for (auto &queue: families_queues) {
+        for (auto &queue: queues_ids) {
             VkDeviceQueueCreateInfo queueCreateInfo = {};
             queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
             queueCreateInfo.queueCount = 1u;
             queueCreateInfo.pQueuePriorities = &prio;
-            queueCreateInfo.queueFamilyIndex = queue.index_family.value();
-            std::string strQueueType = {};
-            if (queue.type == vk::QueueType::Graphics) strQueueType = "Graphics";
-            if (queue.type == vk::QueueType::Compute) strQueueType = "Compute";
-            if (queue.type == vk::QueueType::Present) strQueueType = "Present";
-            LOG("Preparing queue for {}", strQueueType);
+            queueCreateInfo.queueFamilyIndex = queue;
             queueCreateInfos.push_back(queueCreateInfo);
         }
 

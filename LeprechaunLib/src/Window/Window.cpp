@@ -69,7 +69,7 @@ std::vector<const char*> Window::get_vk_extensions() const
     LOG("Available extensions:");
     for (auto &e : extensions)
     {
-        LOG("\t - {}", e);
+        LOG("\t * {}", e);
     }
     return extensions;
 }

@@ -142,11 +142,7 @@ int main()
 
     Leprechaun::VulkanApiBackend vkApi {main_window};
     Leprechaun::Device device{vkApi};
-    uint32_t api_version;
-    vkEnumerateInstanceVersion(&api_version);
 
-    /*LOG("VulkanAPI version {}.{}.{}", VK_API_VERSION_MAJOR(api_version), VK_API_VERSION_MINOR(api_version),
-                 VK_API_VERSION_PATCH(api_version));*/
 
 
     return 0;
